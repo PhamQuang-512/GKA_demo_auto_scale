@@ -1,0 +1,87 @@
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vpa
+  namespace: vpa
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: vpa
+  template:
+    metadata:
+      labels:
+        app: vpa
+    spec:
+      containers:
+      - name: vpa
+        image: k8s.gcr.io/ubuntu-slim:0.1
+        resources:
+          requests:
+            cpu: "10m"
+            memory: "50Mi"
+        command:
+          - /bin/sh
+        args: ["-c", "while true; do timeout 0.5s yes > /dev/null; done"]
+# ---
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   name: vpa
+#   namespace: vpa
+# spec:
+#   selector:
+#     app: vpa
+#   ports:
+#   - port: 80
+#     targetPort: 80
+# ---
+# apiVersion: networking.k8s.io/v1
+# kind: Ingress
+# metadata:
+#   name: myingress-vpa
+#   namespace: vpa
+#   labels:
+#     name: myingress-vpa
+#   annotations:
+#     nginx.ingress.kubernetes.io/use-regex: "true"
+#     nginx.ingress.kubernetes.io/rewrite-target: /$2
+# spec:
+#   ingressClassName: nginx
+#   rules:
+#   - http:
+#       paths:
+#       - pathType: ImplementationSpecific
+#         path: /vpa(/|$)(.*)
+#         backend:
+#           service:
+#             name: vpa
+#             port: 
+#               number: 80
+---
+apiVersion: autoscaling.k8s.io/v1
+kind: VerticalPodAutoscaler
+metadata:
+  name: myapp
+  namespace: vpa
+spec:
+  targetRef:
+    kind: Deployment
+    name: vpa
+    apiVersion: apps/v1
+  updatePolicy:
+    updateMode: "Auto"
+  resourcePolicy:
+    containerPolicies:
+      - containerName: vpa
+        mode: Auto
+        controlledResources:
+          - cpu
+          - memory
+        minAllowed:
+          cpu: 1m
+          memory: 1Mi
+        maxAllowed:
+          cpu: 300m
+          memory: 500Mi

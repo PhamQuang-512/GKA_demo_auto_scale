@@ -1,19 +1,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: myapp
+  name: hpa
   namespace: hpa
 spec:
   selector:
     matchLabels:
-      app: myapp
+      app: hpa
   template:
     metadata:
       labels:
-        app: myapp
+        app: hpa
     spec:
       containers:
-      - name: myapp
+      - name: hpa
         image: nginx
         resources:
           limits:
@@ -25,11 +25,11 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: myapp
+  name: hpa
   namespace: hpa
 spec:
   selector:
-    app: myapp
+    app: hpa
   ports:
   - port: 80
     targetPort: 80
@@ -37,20 +37,23 @@ spec:
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: myingress
+  name: myingress-hpa
   namespace: hpa
   labels:
-    name: myingress
+    name: myingress-hpa
+  annotations:
+    nginx.ingress.kubernetes.io/use-regex: "true"
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
 spec:
   ingressClassName: nginx
   rules:
   - http:
       paths:
-      - pathType: Prefix
-        path: "/"
+      - pathType: ImplementationSpecific
+        path: /hpa(/|$)(.*)
         backend:
           service:
-            name: myapp
+            name: hpa
             port: 
               number: 80
 ---
@@ -63,7 +66,7 @@ spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: myapp
+    name: hpa
   minReplicas: 1
   maxReplicas: 10
   metrics:
