@@ -1,0 +1,29 @@
+namespaceOverride: "monitoring"
+
+global:
+  rbac:
+    create: true
+
+grafana:
+  enabled: true
+  adminPassword: q12345678
+  ingress:
+    enabled: true
+    ingressClassName: nginx
+    path: /
+  serviceMonitor:
+    scrapeTimeout: "5s"
+
+prometheus:
+  enabled: true
+  podDisruptionBudget:
+    enabled: true
+    minAvailable: 1
+    maxUnavailable: ""
+  serviceMonitor:
+    interval: "5s"
+    selfMonitor: true
+  prometheusSpec:
+    scrapeInterval: "5s"
+    ruleNamespaceSelector: {}
+    ruleSelector: {}

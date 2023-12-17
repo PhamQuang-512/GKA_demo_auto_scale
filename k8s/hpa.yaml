@@ -15,10 +15,11 @@ spec:
       containers:
       - name: hpa
         image: nginx
+        command: ["/bin/sh", "-c", "while true; do curl 34.81.200.141 > /dev/null; sleep 0.33; done"]
         resources:
           limits:
-            memory: "100Mi"
-            cpu: "100m"
+            memory: "200Mi"
+            cpu: "10m"
         ports:
         - containerPort: 80
 ---
@@ -60,7 +61,7 @@ spec:
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
-  name: hpa-test
+  name: hpa
   namespace: hpa
 spec:
   scaleTargetRef:
