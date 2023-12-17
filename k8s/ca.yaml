@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ca 
+spec:
+  replicas: 5
+  selector:
+    matchLabels:
+      app: ca
+  template:
+    metadata:
+      labels:
+        app: ca
+    spec:
+      containers:
+      - name: ca 
+        image: nginx
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 80
