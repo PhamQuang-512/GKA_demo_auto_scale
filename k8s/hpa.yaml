@@ -17,8 +17,8 @@ spec:
         image: nginx
         resources:
           limits:
-            memory: "200Mi"
-            cpu: "10m"
+            memory: "10Mi"
+            cpu: "3m"
         ports:
         - containerPort: 80
 ---
@@ -75,4 +75,4 @@ spec:
       name: cpu
       target:
         type: Utilization
-        averageUtilization: 50
+        averageUtilization: 40

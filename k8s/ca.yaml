@@ -16,6 +16,9 @@ spec:
       - name: ca 
         image: nginx
         resources:
+          requests:
+            memory: "128Mi"
+            cpu: "500m"
           limits:
             memory: "128Mi"
             cpu: "500m"
