@@ -42,20 +42,6 @@ resource "google_container_cluster" "auto_scale_demo" {
   vertical_pod_autoscaling {
     enabled = true
   }
-
-  # cluster_autoscaling {
-  #   enabled = false
-  #   resource_limits {
-  #     resource_type = "cpu"
-  #     minimum       = 1
-  #     maximum       = 10
-  #   }
-  #   resource_limits {
-  #     resource_type = "memory"
-  #     minimum       = 1
-  #     maximum       = 10
-  #   }
-  # }
 }
 
 
