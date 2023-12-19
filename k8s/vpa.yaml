@@ -16,14 +16,11 @@ spec:
     spec:
       containers:
       - name: vpa
-        image: k8s.gcr.io/ubuntu-slim:0.1
+        image: nginx
         resources:
           requests:
             cpu: "1m"
             memory: "1Mi"
-        command:
-          - /bin/sh
-        args: ["-c", "while true; do timeout 0.5s yes > /dev/null; done"]
 ---
 apiVersion: v1
 kind: Service
@@ -83,5 +80,5 @@ spec:
           cpu: 1m
           memory: 1Mi
         maxAllowed:
-          cpu: 100m
-          memory: 200Mi
+          cpu: 50m
+          memory: 100Mi
