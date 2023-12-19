@@ -19,11 +19,8 @@ spec:
         image: k8s.gcr.io/ubuntu-slim:0.1
         resources:
           requests:
-            cpu: "50m"
-            memory: "50Mi"
-          limits:
-            cpu: "50m"
-            memory: "50Mi"
+            cpu: "1m"
+            memory: "1Mi"
         command:
           - /bin/sh
         args: ["-c", "while true; do timeout 0.5s yes > /dev/null; done"]
@@ -74,11 +71,11 @@ spec:
     name: vpa
     apiVersion: apps/v1
   updatePolicy:
-    updateMode: "Off"
+    updateMode: "Auto"
   resourcePolicy:
     containerPolicies:
       - containerName: vpa
-        mode: "Off"
+        mode: "Auto"
         controlledResources:
           - cpu
           - memory

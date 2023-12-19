@@ -15,7 +15,6 @@ spec:
       containers:
       - name: hpa
         image: nginx
-        command: ["/bin/sh", "-c", "while true; do curl 34.81.200.141 > /dev/null; sleep 0.33; done"]
         resources:
           limits:
             memory: "200Mi"
